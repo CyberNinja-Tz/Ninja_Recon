@@ -51,8 +51,7 @@ To deploy **Ninja_Recon**, follow these steps on your Kali Linux terminal:
 
 ```bash
 # 1. Clone this repository
-git clone [https://github.com/YOUR_USERNAME/Ninja_Recon.git](https://github.com/YOUR_USERNAME/Ninja_Recon.git)
-
+git clone https://github.com/CyberNinja-Tz/Ninja_Recon
 # 2. Navigate to the directory
 cd Ninja_Recon
 

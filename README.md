@@ -56,11 +56,11 @@ git clone https://github.com/CyberNinja-Tz/Ninja_Recon
 cd Ninja_Recon
 
 # 3. Grant execution permissions and run the setup
-chmod +x setup.sh
-./setup.sh
+sudo chmod +x setup.sh
+sudo ./setup.sh
 
 # 4. Launch the tool like a Ninja
-./Ninja_Recon.sh
+sudo ./Ninja_Recon.sh
 
 
 

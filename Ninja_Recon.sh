@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # ==========================================================
-# TOOL: NINJA_RECON v2.0 (2026 Edition)
+# TOOL: NINJA_RECON v3.0 (Professional Logging Edition)
 # CODED BY: Cyber Ninja
-# DESCRIPTION: Advanced Reconnaissance Automator with Ninja Aesthetics
+# DESCRIPTION: Advanced Reconnaissance with Auto-Reporting
 # ==========================================================
 
 # Rangi za Msingi
 RESET="\033[0m"
+RED="\033[01;31m"
+
+# Tengeneza folder la ripoti kama halipo
+LOG_DIR="Ninja_Logs"
+mkdir -p $LOG_DIR
 
 # Function ya kubadilisha rangi (Color Rotation)
 rotate_color() {
@@ -16,10 +21,10 @@ rotate_color() {
     echo -e "$RANDOM_COLOR"
 }
 
-# Function ya Maandisha ya Mbwe mbwe (Typewriter Effect)
+# Function ya Maandisha ya Mbwe mbwe
 ninja_type() {
     text="$1"
-    delay=0.03
+    delay=0.01
     for (( i=0; i<${#text}; i++ )); do
         echo -ne "${text:$i:1}"
         sleep $delay
@@ -27,136 +32,103 @@ ninja_type() {
     echo ""
 }
 
-# 1. BANNER YA NINJA_RECON
-clear
-rotate_color
-echo -e "############################################################"
-echo -e "#                                                          #"
-echo -e "#   _   _ ___ _   _      _   ____  _____ ____ ___  _   _   #"
-echo -e "#  | \ | |_ _| \ | |    | | |  _ \| ____/ ___/ _ \| \ | |  #"
-echo -e "#  |  \| || ||  \| | _  | | | |_) |  _|| |  | | | |  \| |  #"
-echo -e "#  | |\  || || |\  || |_| | |  _ <| |__| |__| |_| | |\  |  #"
-echo -e "#  |_| \_|___|_| \_| \___/  |_| \_\_____\____\___/|_| \_|  #"
-echo -e "#                                                          #"
-echo -e "############################################################"
-echo -e "          [>>] CODED BY CYBER NINJA - 2026 [<<]            "
-echo -e "${RESET}"
+# --- MAIN MENU LOOP ---
+while true; do
+    clear
+    rotate_color
+    echo -e "############################################################"
+    echo -e "#                                                          #"
+    echo -e "#   _   _ ___ _   _      _   ____  _____ ____ ___  _   _   #"
+    echo -e "#  | \ | |_ _| \ | |    | | |  _ \| ____/ ___/ _ \| \ | |  #"
+    echo -e "#  |  \| || ||  \| | _  | | | |_) |  _|| |  | | | |  \| |  #"
+    echo -e "#  | |\  || || |\  || |_| | |  _ <| |__| |__| |_| | |\  |  #"
+    echo -e "#  |_| \_|___|_| \_| \___/  |_| \_\_____\____\___/|_| \_|  #"
+    echo -e "#                                                          #"
+    echo -e "############################################################"
+    echo -e "          [>>] CODED BY CYBER NINJA - 2026 [<<]            "
+    echo -e "          [>>] LOGS SAVED IN: $LOG_DIR/      [<<]            "
+    echo -e "${RESET}"
 
-sleep 1
+    echo -e "\n$(rotate_color)[*] SELECT A TASK TO PERFORM:${RESET}\n"
 
-# 2. MENU KWA MBWE MBWE
-rotate_color
-ninja_type "[*] INITIALIZING NINJA_RECON CORE..."
-sleep 0.5
-echo -e "\n$(rotate_color)[*] THIS TOOL WILL PERFORM THE FOLLOWING TASKS:${RESET}\n"
+    echo -e "$(rotate_color)[1]  WEB APPLICATION FIREWALL DETECTION"
+    echo -e "[2]  FIND SHARED && NEW SERVERS"
+    echo -e "[3]  FIND HTTP ERRORS"
+    echo -e "[4]  RUNNING SERVICES (PORTS)"
+    echo -e "[5]  EXTRACT EXIF DATA FROM PHOTOS"
+    echo -e "[6]  ANONYMOUSLY SCAN (Proxychains + Tor)"
+    echo -e "[7]  SPOOFING & DECOY SCAN"
+    echo -e "[8]  EVADING FIREWALL (BLOCK ALL FIREWALL)"
+    echo -e "[9]  SCANNING WITH REASONS (ADVANCED)"
+    echo -e "[10] OPERATING SYSTEM DETECTION"
+    echo -e "[11] TURN OFF IDS EVASION"
+    echo -e "[12] TEST IF A VICTIM IS VULNERABLE TO DOS"
+    echo -e "[14] IP RANGES SCANNING (SUBNET SCANNER)"
+    echo -e "[0]  EXIT TOOL${RESET}"
 
-menu_items=(
-    "[1]  WEB APPLICATION FIREWALL DETECTION"
-    "[2]  FIND SHARED && NEW SERVERS"
-    "[3]  FIND HTTP ERRORS"
-    "[4]  RUNNING SERVICES (PORTS)"
-    "[5]  EXTRACT EXIF DATA FROM PHOTOS"
-    "[6]  ANONYMOUSLY SCAN"
-    "[7]  SPOOFING & DECOY SCAN"
-    "[8]  EVADING FIREWALL (BLOCK ALL FIREWALL)"
-    "[9]  SCANNING WITH REASONS (ADVANCED)"
-    "[10] OPERATING SYSTEM DETECTION"
-    "[11] TURN OFF IDS EVASION"
-    "[12] TEST IF A VICTIM IS VULNERABLE TO DOS"
-    "[13] USE SCANNING METHOD TO PERFORM DOS"
-    "[14] IP RANGES SCANNING (SUBNET SCANNER)"
-    "[15] DNS WEB BRUTE-FORCING (COMING SOON)"
-)
+    echo -e "\n$(rotate_color)>>>>>>>>>>>>>>>>>>> coded by Cyber Ninja >>>>>>>>>>>>>>>>>>${RESET}"
+    echo -ne "$(rotate_color)ninja_recon# Select Option: ${RESET}"
+    read OPTION
 
-for item in "${menu_items[@]}"; do
-    echo -e "$(rotate_color)$item${RESET}"
-    sleep 0.05
+    # Jina la file la ripoti kulingana na muda
+    REPORT="$LOG_DIR/scan_$(date +%Y%m%d_%H%M%S).txt"
+
+    case $OPTION in
+        1)
+            echo -ne "Enter target domain: "
+            read DOMAIN
+            if [ "$DOMAIN" ]; then
+                echo -e "\n--- WAF SCAN FOR $DOMAIN ---" >> $REPORT
+                nmap -p80,443 --script http-waf-detect $DOMAIN | tee -a $REPORT
+            fi
+            read -p "Press Enter to return..."
+            ;;
+        2)
+            echo -ne "Enter target: "
+            read WEBSITE
+            if [ "$WEBSITE" ]; then
+                echo -e "\n--- SHARED SERVER SCAN FOR $WEBSITE ---" >> $REPORT
+                nmap -p80,443 --script dns-brute $WEBSITE | tee -a $REPORT
+            fi
+            read -p "Press Enter to return..."
+            ;;
+        4)
+            echo -ne "Enter target Website: "
+            read TARGET_WEBSITE
+            if [ "$TARGET_WEBSITE" ]; then
+                echo -e "\n--- SERVICE SCAN FOR $TARGET_WEBSITE ---" >> $REPORT
+                nmap -T4 -A -v $TARGET_WEBSITE | tee -a $REPORT
+            fi
+            read -p "Press Enter to return..."
+            ;;
+        10)
+            echo -ne "Enter target IP: "
+            read HOST_IP
+            if [ "$HOST_IP" ]; then
+                echo -e "\n--- OS DETECTION FOR $HOST_IP ---" >> $REPORT
+                nmap -O $HOST_IP | tee -a $REPORT
+            fi
+            read -p "Press Enter to return..."
+            ;;
+        14)
+            echo -ne "Enter subnet (e.g., 192.168.1): "
+            read SUBNET
+            if [ "$SUBNET" ]; then
+                echo -e "\n--- SUBNET SCAN FOR $SUBNET.X ---" >> $REPORT
+                for IP in $(seq 1 255); do
+                    ping -c 1 -W 1 $SUBNET.$IP | grep "64 bytes" | tee -a $REPORT &
+                done
+                wait
+            fi
+            read -p "Press Enter to return..."
+            ;;
+        0)
+            echo -e "\n$(rotate_color)GOODBYE NINJA. LOGS ARE SECURED.${RESET}"
+            exit 0
+            ;;
+        *)
+            echo -e "\n${RED}[!] INVALID OPTION!${RESET}"
+            sleep 1
+            ;;
+    esac
 done
-
-echo -e "\n$(rotate_color)>>>>>>>>>>>>>>>>>>> coded by Cyber Ninja >>>>>>>>>>>>>>>>>>${RESET}"
-
-# --- ANZA EXECUTION ZA TOOLS ---
-
-echo -e "\n$(rotate_color) [1] WEB APPLICATION FIREWALL DETECTION SCANNING...${RESET}\n"
-echo -ne "$(rotate_color)Enter target domain (e.g., example.com): ${RESET}"
-read DOMAIN
-
-if [ "$DOMAIN" ]; then
-    nmap -p80,443 --script http-waf-detect --script-args="http-waf-detect.aggro,http-waf-detect.detectBodyChange" $DOMAIN
-fi
-
-echo -e "\n$(rotate_color) [2] FINDING SHARED && NEW SERVERS ${RESET}\n"
-echo -ne "$(rotate_color)Enter victim website or press Enter to SKIP: ${RESET}"
-read WEBSITE
-
-if [ "$WEBSITE" ]; then 
-    nmap -p80,443 --script dns-brute $WEBSITE
-    echo -e "\n$(rotate_color) [3] FINDING HTTP ERRORS ${RESET}\n"
-    nmap -p80,443 --script http-errors $WEBSITE
-fi
-
-echo -e "\n$(rotate_color) [4] FINDING RUNNING SERVICES (PORTS) ${RESET}\n"
-echo -ne "$(rotate_color)Enter target Website: ${RESET}"
-read TARGET_WEBSITE
-
-if [ "$TARGET_WEBSITE" ]; then
-    nmap -T4 -A -v $TARGET_WEBSITE
-fi
-
-echo -e "\n$(rotate_color) [5] EXTRACT EXIF DATA FROM PHOTOS ${RESET}\n"
-echo -ne "$(rotate_color)Enter Target Website: ${RESET}"
-read TARGET
-
-if [ "$TARGET" ]; then
-    nmap -p80,443 --script http-exif-spider $TARGET
-fi
-
-echo -e "\n$(rotate_color) [6] ANONYMOUSLY SCAN (PROXY DETECTION) ${RESET}\n"
-
-if [ -e /usr/bin/proxychains ]; then
-    echo -e "\033[01;32m[ ✔ ] proxychains ................[ found ]${RESET}"
-else 
-    echo -e "\033[01;31m[ X ] proxychains NOT FOUND! Installing...${RESET}"
-    sudo apt-get install proxychains -y
-fi
-
-if [ -e /etc/tor ]; then
-    echo -e "\033[01;32m[ ✔ ] tor ................[ found ]${RESET}"
-else 
-    echo -e "\033[01;31m[ X ] tor NOT FOUND! Installing...${RESET}"
-    sudo apt-get install tor -y
-fi
-
-echo -ne "$(rotate_color)Enter Target for Anonymous Scan: ${RESET}"
-read TARGET_SITE
-if [ "$TARGET_SITE" ]; then
-    sudo proxychains nmap -sT -PN -n -sV -p 80,443,21,22 $TARGET_SITE
-fi
-
-echo -e "\n$(rotate_color) [7] SPOOFING & DECOY SCAN ${RESET}\n"
-echo -ne "$(rotate_color)Enter Target and Decoy IPs (e.g., target.com 1.1.1.1,2.2.2.2): ${RESET}"
-read WEB_DECOY
-if [ "$WEB_DECOY" ]; then
-    nmap -sS $WEB_DECOY
-fi
-
-echo -e "\n$(rotate_color) [8] EVADING FIREWALL ${RESET}\n"
-read -p "Enter Target IP: " HOST
-if [ "$HOST" ]; then nmap -sS -P0 $HOST; fi
-
-echo -e "\n$(rotate_color) [10] OPERATING SYSTEM DETECTION ${RESET}\n"
-read -p "Enter Target IP: " HOST_IP
-if [ "$HOST_IP" ]; then nmap -O $HOST_IP; fi
-
-echo -e "\n$(rotate_color) [14] SUBNET SCANNER ${RESET}\n"
-echo -ne "$(rotate_color)Enter subnet (e.g., 192.168.1): ${RESET}"
-read SUBNET
-if [ "$SUBNET" ]; then
-    for IP in $(seq 1 255); do
-        ping -c 1 -W 1 $SUBNET.$IP | grep "64 bytes" &
-    done
-    wait
-fi
-
-echo -e "\n$(rotate_color)MISSION ACCOMPLISHED. SYSTEM GOING OFFLINE...${RESET}"
-exit 0
